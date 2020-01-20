@@ -1,0 +1,149 @@
+@import "reset-css";
+@import "./mixins/respond-to";
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #___gatsby {
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+#gatsby-focus-wrapper {
+  display: grid;
+  min-height: 100%;
+  grid-template-rows: 1fr auto;
+}
+
+.top {
+  background-color: #f6f8fa;
+}
+
+header {
+  position: relative;
+  display: flex;
+  background-color: #003366;
+  border-top: 4px solid #c20017;
+  color: #ffffff;
+  padding: 0.8rem 1rem;
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+    
+    &:hover {
+      color: #edf6ff;
+    }
+  }
+
+  & > div {
+    font-weight: bold;
+    display: flex;
+
+    & > h1 {
+      font-size: 1.6em;
+      margin-right: 1rem;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    & > ul {
+      position: absolute;
+      display: none;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #003366;
+      
+      & > li {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+        * {
+          font-size: 14px;
+          display: inline-block;
+          padding: 0.5rem;
+        }
+        
+        a {
+          transition: background-color .2s linear;
+        }
+      }
+    }
+
+    @include respond-to('md') {
+      & > ul {
+        position: relative;
+        display: flex;
+        top: unset;
+        
+        & > li > a:hover {
+          background-color: #40668c;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+}
+
+footer {
+  grid-row-start: 2;
+  grid-row-end: 3;
+  padding: 1rem;
+  background-color: #003366;
+  color: #ffffff;
+  
+  a {
+    color: #ffffff;
+  }
+}
+
+.hamburger {
+  fill: #ffffff;
+  margin-right: 1rem;
+  user-select: none;
+  cursor: pointer;
+
+  @include respond-to('md') {
+    display: none;
+  }
+}
+
+.header-overlay {
+  display: none;
+}
+
+.hamburger-input {
+  display: none;
+
+  &:checked ~ .hamburger {
+    fill: gray;
+  }
+
+  @include respond-to('md', 'max') {
+    &:checked ~ div > ul {
+      display: block;
+      z-index: 2;
+    }
+  
+    &:checked ~ .header-overlay {
+      display: block;
+      position: static;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      min-height: 200vh;
+      z-index: 1;
+    }
+  }
+}
