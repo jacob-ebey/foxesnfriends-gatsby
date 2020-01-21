@@ -20,17 +20,16 @@ const Layout = ({ children }) => {
   return (
     <React.Fragment>
       <div className="top">
-        <header role="banner">
-          <input class="hamburger-input" id="hamburger" type="checkbox" />
+        <header role="banner" className="header">
+          <input className="hamburger-input" id="hamburger" name="hamburger" type="checkbox" />
           <label
-            class="hamburger"
-            role="button"
+            className="hamburger"
             htmlFor="hamburger"
             aria-label="Menu"
           >
             <Hamburger height="32px" width="32px" />
           </label>
-          <label htmlFor="hamburger" class="header-overlay" />
+          {/* <label htmlFor="hamburger" className="header-overlay" /> */}
 
           <div
             dangerouslySetInnerHTML={{

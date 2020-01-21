@@ -19,6 +19,7 @@ exports.createPages = ({ actions: { createPage }, graphql }) => {
               }
               frontmatter {
                 templateKey
+                tags
               }
             }
           }
@@ -40,6 +41,7 @@ exports.createPages = ({ actions: { createPage }, graphql }) => {
           // additional data can be passed via context
           context: {
             id: edge.node.id,
+            tags: edge.node.frontmatter.tags
           },
         })
       });

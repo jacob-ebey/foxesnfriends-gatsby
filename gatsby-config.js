@@ -5,6 +5,16 @@ module.exports = {
       "Breaking News Updates | Latest News Headlines | Photos & News Videos"
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [
+          `roboto`,
+          `source sans pro\:300,400,700,900` // you can also specify font weights and styles
+        ],
+        display: 'swap'
+      }
+    },
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sass",
     {
