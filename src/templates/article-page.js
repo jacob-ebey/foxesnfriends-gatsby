@@ -28,6 +28,9 @@ const ArticlePage = ({ data: { article, relatedArticles } }) => {
       article.frontmatter.tags.includes(t)
     );
 
+  const url = typeof window === "object" && window.location && window.location.href;
+  const origin = typeof window === "object" && window.location && window.location.origin;
+
   return (
     <Layout>
       <Helmet>
@@ -54,11 +57,18 @@ const ArticlePage = ({ data: { article, relatedArticles } }) => {
             <h1>{article.frontmatter.title}</h1>
 
             <div className="article-page__share-icons">
-              <Facebook />
-              <Email />
-              <Reddit />
-              <Pinterest />
-              <Twitter />
+              <Facebook url={url} />
+              <Email subject={article.frontmatter.title} url={url} />
+              <Reddit url={url} />
+              <Pinterest
+                shareText={article.frontmatter.title}
+                mediaSrc={
+                  origin +
+                  article.frontmatter.featuredimage.childImageSharp.fluid.src
+                }
+                url={url}
+              />
+              <Twitter shareText={article.frontmatter.title} url={url} />
             </div>
 
             {article.frontmatter.featuredimage && (
@@ -77,24 +87,33 @@ const ArticlePage = ({ data: { article, relatedArticles } }) => {
 
         {relatedArticles && relatedArticles.edges.length > 0 && (
           <div className="article-page__related-articles">
-            <Card title="Related Articles">
-              {relatedArticles.edges.map(({ node: article }) => (
-                <div key={article.id} className="article-page__related-article">
-                  <a href={article.fields.slug}>
-                    <Img
-                      fluid={
-                        article.frontmatter.featuredimage.childImageSharp.fluid
-                      }
-                    />
-                  </a>
-                  <p>
-                    <a href={article.fields.slug}>
-                      {article.frontmatter.title}
-                    </a>
-                  </p>
-                </div>
-              ))}
-            </Card>
+            <aside>
+              {relatedArticles && relatedArticles.edges.length > 0 && (
+                <Card title="Related Articles">
+                  {relatedArticles.edges.map(({ node: article }) => (
+                    <div
+                      key={article.id}
+                      className="article-page__related-article"
+                    >
+                      <a href={article.fields.slug}>
+                        <Img
+                          alt={article.frontmatter.title}
+                          fluid={
+                            article.frontmatter.featuredimage.childImageSharp
+                              .fluid
+                          }
+                        />
+                      </a>
+                      <p>
+                        <a href={article.fields.slug}>
+                          {article.frontmatter.title}
+                        </a>
+                      </p>
+                    </div>
+                  ))}
+                </Card>
+              )}
+            </aside>
           </div>
         )}
       </div>
@@ -110,7 +129,7 @@ export const pageQuery = graphql`
       id
       html
       frontmatter {
-        date(fromNow: true)
+        date(formatString: "D/M/YYYY")
         title
         overview
         tags
@@ -136,9 +155,7 @@ export const pageQuery = graphql`
             slug
           }
           frontmatter {
-            date(fromNow: true)
             title
-            overview
             tags
             featuredimage {
               childImageSharp {

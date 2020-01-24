@@ -2,6 +2,15 @@ const _ = require("lodash");
 const path = require("path");
 const { createFilePath } = require("gatsby-source-filesystem");
 const { fmImagesToRelative } = require("gatsby-remark-relative-images");
+const stocks = require("yahoo-stock-prices");
+const moment = require("moment");
+
+// TODO: Add news api to the pages to fill out content until we have more articles.
+
+// const NewsAPI = require('newsapi');
+
+// const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
+// newsapi.v2.topHeadlines()
 
 exports.createPages = ({ actions: { createPage }, graphql }) => {
   return Promise.all([
@@ -42,8 +51,8 @@ exports.createPages = ({ actions: { createPage }, graphql }) => {
           context: {
             id: edge.node.id,
             tags: edge.node.frontmatter.tags
-          },
-        })
+          }
+        });
       });
     })
   ]);
@@ -61,4 +70,72 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       value
     });
   }
+};
+
+exports.createSchemaCustomization = ({ actions, schema }) => {
+  const { createTypes } = actions;
+
+  createTypes([
+    schema.buildObjectType({
+      name: "StocksData",
+      fields: {
+        apple: {
+          type: "Float"
+        },
+        microsoft: {
+          type: "Float"
+        },
+        facebook: {
+          type: "Float"
+        }
+      }
+    })
+  ]);
+};
+
+exports.createResolvers = ({ createResolvers }) => {
+  createResolvers({
+    Query: {
+      stocks: {
+        type: "StocksData!",
+        resolve: () => {
+          return Promise.all([
+            new Promise((resolve, reject) => {
+              stocks.getCurrentPrice("AAPL", (err, data) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(data);
+                }
+              });
+            }),
+            new Promise((resolve, reject) => {
+              stocks.getCurrentPrice("MSFT", (err, data) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(data);
+                }
+              });
+            }),
+            new Promise((resolve, reject) => {
+              stocks.getCurrentPrice("FB", (err, data) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(data);
+                }
+              });
+            })
+          ]).then(([apple, microsoft, facebook]) => {
+            return {
+              apple,
+              microsoft,
+              facebook
+            };
+          });
+        }
+      }
+    }
+  });
 };

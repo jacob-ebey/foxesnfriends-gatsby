@@ -3,7 +3,7 @@ templateKey: article-page
 title: NBC Embraces Wartime Television
 date: 2020-1-10T15:04:10.000Z
 overview: >-
-  NBC starts the new year strong capitalizing on the rise of Islamophobia with the release of their newest chapter in the Law & Order series
+  NBC starts the new year strong capitalizing on the rise of Islamophobia with the release of their newest chapter in the Law & Order series.
 tags:
   - Entertainment
   - US News

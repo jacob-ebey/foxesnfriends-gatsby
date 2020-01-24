@@ -1,0 +1,75 @@
+@import "../components/mixins/respond-to";
+
+.home {
+  &__main-content {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .card--body {
+    h3{
+      font-size: 24px;
+    }
+  }
+
+  &__new-article {
+    margin-top: 1rem;
+    border-top: 1px solid #cedfef;
+
+    &__desktop-image {
+      display: none !important;
+    }
+
+    @include respond-to("md", "max") {
+      &__description {
+        width: calc(100% + 88px + 1rem);
+        margin-left: calc(-88px + -1rem);
+      }
+    }
+
+    @include respond-to("md") {
+      &__desktop-image {
+        display: inline-block !important;
+      }
+
+      &__mobile-image {
+        display: none !important;
+      }
+    }
+    
+    div {
+      display: flex;
+      margin-top: 1rem;
+
+      .gatsby-image-wrapper {
+        margin: 0;
+      }
+
+      figcaption {
+        flex: 1;
+        padding-left: 1rem;
+
+        a {
+          display: block;
+
+          p {
+            font-size: 11px;
+            margin-bottom: 0.5rem;
+            text-transform: capitalize;
+          }
+
+          h5 {
+            font-size: 16px;
+            margin-bottom: 0.5rem;
+            text-transform: capitalize;
+
+            @include respond-to("md", "max") {
+              margin-bottom: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

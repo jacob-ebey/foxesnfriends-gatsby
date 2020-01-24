@@ -1,9 +1,15 @@
 .card {
+  display: block;
+  background-color: #ffffff;
   border: 1px solid #cedfef;
-  padding: 1rem;
+  
+  &--body {
+    padding: 1rem;
 
-  h3 {
-    font-size: 21px;
-    margin-bottom: 1rem;
+    h3 {
+      font-size: 21px;
+      margin-bottom: 1rem;
+      text-transform: capitalize;
+    }
   }
 }
