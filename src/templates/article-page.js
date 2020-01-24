@@ -15,7 +15,7 @@ import Layout from "../components/layout";
 
 import "./article-page.scss";
 
-const ArticlePage = ({ data: { article, relatedArticles } }) => {
+const ArticlePage = ({ data: { article, relatedArticles, site: { siteMetadata: { siteUrl } } } }) => {
   const firstRelated =
     relatedArticles.edges &&
     relatedArticles.edges.length > 0 &&
@@ -28,8 +28,8 @@ const ArticlePage = ({ data: { article, relatedArticles } }) => {
       article.frontmatter.tags.includes(t)
     );
 
-  const url = typeof window === "object" && window.location && window.location.href;
-  const origin = typeof window === "object" && window.location && window.location.origin;
+  const url = siteUrl + article.fields.slug;
+  const origin = siteUrl;
 
   return (
     <Layout>
@@ -125,9 +125,17 @@ export default ArticlePage;
 
 export const pageQuery = graphql`
   query ArticlePage($id: String!, $tags: [String]) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     article: markdownRemark(id: { eq: $id }) {
       id
       html
+      fields {
+        slug
+      }
       frontmatter {
         date(formatString: "D/M/YYYY")
         title

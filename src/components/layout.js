@@ -14,7 +14,8 @@ const Layout = ({ children }) => {
     brandIcon: { publicURL: brandIcon },
     stocks,
     header,
-    footer
+    // TODO: Add footer back
+    // footer
   } = useStaticQuery(graphql`
     {
       site {
@@ -98,11 +99,11 @@ const Layout = ({ children }) => {
         <main>{children}</main>
       </div>
 
-      <footer
+      {/* <footer
         dangerouslySetInnerHTML={{
           __html: footer.html
         }}
-      />
+      /> */}
     </React.Fragment>
   );
 };

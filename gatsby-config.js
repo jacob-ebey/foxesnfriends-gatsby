@@ -1,6 +1,6 @@
 const {
   NODE_ENV,
-  URL: NETLIFY_SITE_URL = "https://www.example.com",
+  URL: NETLIFY_SITE_URL = "https://www.foxesnfriends.com",
   DEPLOY_PRIME_URL: NETLIFY_DEPLOY_URL = NETLIFY_SITE_URL,
   CONTEXT: NETLIFY_ENV = NODE_ENV
 } = process.env;
@@ -102,6 +102,7 @@ module.exports = {
     },
     {
       resolve: "gatsby-plugin-netlify-cms"
+      // TODO: Add netlify-cms preview for articles
       // options: {
       //   modulePath: `${__dirname}/src/cms/cms.js`
       // }
