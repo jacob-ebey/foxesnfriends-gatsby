@@ -1,5 +1,5 @@
 @import "reset-css";
-@import "../components/mixins/respond-to";
+@import "../mixins/respond-to";
 
 .article-page {
   @include respond-to("lg") {

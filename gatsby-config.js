@@ -101,11 +101,10 @@ module.exports = {
       }
     },
     {
-      resolve: "gatsby-plugin-netlify-cms"
-      // TODO: Add netlify-cms preview for articles
-      // options: {
-      //   modulePath: `${__dirname}/src/cms/cms.js`
-      // }
+      resolve: "gatsby-plugin-netlify-cms",
+      options: {
+        modulePath: `${__dirname}/src/cms/cms.js`
+      }
     },
     {
       resolve: "gatsby-plugin-purgecss", // purges all unused/unreferenced css rules
