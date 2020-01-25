@@ -11,9 +11,12 @@ import "react-sharingbuttons/dist/main.css";
 
 import Card from "../card";
 
+import useComments from "../../hooks/use-comments";
+
 import "./article-page.scss";
 
 const ArticlePageTemplate = ({
+  comments = true,
   data: {
     article: {
       html,
@@ -26,7 +29,6 @@ const ArticlePageTemplate = ({
     }
   }
 }) => {
-  console.log(featuredimage);
   const firstRelated =
     relatedArticles &&
     relatedArticles.edges &&
@@ -40,6 +42,8 @@ const ArticlePageTemplate = ({
 
   const url = siteUrl + slug;
   const origin = siteUrl;
+
+  useComments(slug, comments);
 
   return (
     <div className="article-page">
@@ -116,6 +120,8 @@ const ArticlePageTemplate = ({
           </aside>
         </div>
       )}
+
+      <div id="disqus_thread" className="article-page__comments" />
     </div>
   );
 };

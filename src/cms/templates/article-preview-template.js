@@ -47,6 +47,7 @@ const ArticlePreviewTemplate = ({ entry, widgetFor }) => {
 
   return (
     <ArticlePage
+      comments={false}
       data={{
         article: {
           html,
