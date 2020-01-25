@@ -9,6 +9,9 @@ import "./home.scss";
 
 const IndexPage = ({
   data: {
+    page: {
+      frontmatter: { mainAdvertisement }
+    },
     articles: { edges: allArticles }
   }
 }) => {
@@ -20,6 +23,17 @@ const IndexPage = ({
   return (
     <Layout>
       <div className="home">
+        {mainAdvertisement &&
+          mainAdvertisement.childImageSharp &&
+          mainAdvertisement.childImageSharp.fixed && (
+            <div className="home__main-advertisement">
+              <Img
+                className="home__main-advertisement__img"
+                alt="Advertisement"
+                fixed={mainAdvertisement.childImageSharp.fixed}
+              />
+            </div>
+          )}
         <div className="home__main-content">
           <Card
             imgProps={featuredArticle.frontmatter.featuredimage.childImageSharp}
@@ -37,14 +51,16 @@ const IndexPage = ({
                         className="home__new-article__desktop-image"
                         alt={article.frontmatter.title}
                         fixed={
-                          article.frontmatter.featuredimage.childImageSharp.fixed
+                          article.frontmatter.featuredimage.childImageSharp
+                            .fixed
                         }
                       />
                       <Img
                         className="home__new-article__mobile-image"
                         alt={article.frontmatter.title}
                         fixed={
-                          article.frontmatter.featuredimage.childImageSharp.fixedMobile
+                          article.frontmatter.featuredimage.childImageSharp
+                            .fixedMobile
                         }
                       />
                     </a>
@@ -55,7 +71,10 @@ const IndexPage = ({
                       <a href={article.fields.slug}>
                         <h5>{article.frontmatter.title}</h5>
                       </a>
-                      <a href={article.fields.slug} className="home__new-article__description">
+                      <a
+                        href={article.fields.slug}
+                        className="home__new-article__description"
+                      >
                         <p>{article.frontmatter.overview}</p>
                       </a>
                     </figcaption>
@@ -74,6 +93,17 @@ export default IndexPage;
 
 export const pageQuery = graphql`
   query IndexPage {
+    page: markdownRemark(frontmatter: { templateKey: { eq: "index" } }) {
+      frontmatter {
+        mainAdvertisement {
+          childImageSharp {
+            fixed(width: 728, height: 90) {
+              ...GatsbyImageSharpFixed
+            }
+          }
+        }
+      }
+    }
     articles: allMarkdownRemark(
       filter: { frontmatter: { templateKey: { eq: "article-page" } } }
       sort: { fields: frontmatter___date, order: DESC }

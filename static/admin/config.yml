@@ -13,6 +13,25 @@ media_folder: static/img
 public_folder: /img
 
 collections:
+  - name: "pages"
+    label: "Page"
+    files:
+      - file: "src/pages/index.md"
+        label: "Home"
+        name: "index"
+        fields:
+          - {
+              label: "Template Key",
+              name: "templateKey",
+              widget: "hidden",
+              default: "index",
+            }
+          - {
+              label: "Main Advertisement",
+              name: "mainAdvertisement",
+              widget: "image",
+            }
+
   - name: "article"
     label: "Article"
     folder: "src/pages/article"
@@ -29,6 +48,6 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Tags", name: "tags", widget: "list" }
-      - { label: "Featured Image", name: "featuredimage", widget: image }
+      - { label: "Featured Image", name: "featuredimage", widget: "image" }
       - { label: "Overview", name: "overview", widget: "text" }
       - { label: "Body", name: "body", widget: "markdown" }

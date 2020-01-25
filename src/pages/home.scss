@@ -7,6 +7,14 @@
     padding: 1rem;
   }
 
+  &__main-advertisement {
+    background-color: #eff2f5;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .card--body {
     h3{
       font-size: 24px;
