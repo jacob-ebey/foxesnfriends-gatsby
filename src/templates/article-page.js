@@ -7,15 +7,46 @@ import ArticlePageTemplate from "../components/templates/article-page";
 const ArticlePage = ({ data }) => {
   const {
     article: {
-      frontmatter: { title, overview }
+      fields: { slug },
+      frontmatter: { title, overview, featuredimage }
+    },
+    site: {
+      siteMetadata: { siteUrl }
     }
   } = data;
+
+  const url = siteUrl + slug;
 
   return (
     <Layout>
       <Helmet>
         <title>{`${title}`}</title>
         <meta name="description" content={`${overview}`} />
+
+        <meta name="og:url" content={url} />
+        <meta name="og:title" content={title} />
+        <meta name="og:description" content={overview} />
+        {featuredimage &&
+          featuredimage.childImageSharp &&
+          featuredimage.childImageSharp.fluid && (
+            <meta
+              name="og:image"
+              content={siteUrl + featuredimage.childImageSharp.fluid.src}
+            />
+          )}
+        <meta name="og:type" content="website" />
+
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={overview} />
+        {featuredimage &&
+          featuredimage.childImageSharp &&
+          featuredimage.childImageSharp.fluid && (
+            <meta
+              name="twitter:image"
+              content={siteUrl + featuredimage.childImageSharp.fluid.src}
+            />
+          )}
+        <meta name="twitter:card" content="summary" />
       </Helmet>
 
       <ArticlePageTemplate data={data} />
