@@ -1,0 +1,7 @@
+[build]
+  command = "yarn build"
+  functions = "lambda-build"
+  publish = "public"
+
+# [template.environment]
+#   MONGO_DB_CONNECTION_STRING = "Your MongoDB connection string."
