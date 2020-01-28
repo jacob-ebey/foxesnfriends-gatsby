@@ -3,5 +3,5 @@
   functions = "lambda-build"
   publish = "public"
 
-# [template.environment]
-#   MONGO_DB_CONNECTION_STRING = "Your MongoDB connection string."
+[template.environment]
+  NEWS_API_KEY = "Your api key for https://newsapi.org/"
