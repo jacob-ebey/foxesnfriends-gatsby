@@ -106,13 +106,13 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
           type: 'String!',
         },
         urlToImage: {
-          type: 'String!',
+          type: 'String',
         },
         title: {
           type: 'String!',
         },
         description: {
-          type: 'String!',
+          type: 'String',
         },
         author: {
           type: 'String!',

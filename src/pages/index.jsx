@@ -1,94 +1,90 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
-import Img from 'gatsby-image';
 
-import Layout from '../components/layout';
-import Card from '../components/card';
+import Home from '../components/pages/home';
 import ImgPropTypes from '../prop-types/img';
-import ImgValidation from '../validation/img';
-
-import './home.scss';
 
 const IndexPage = ({
   data: {
     page: {
-      frontmatter: { mainAdvertisement },
+      frontmatter: {
+        mainAdvertisement: {
+          childImageSharp: {
+            fluid: mainAdvertisement,
+          },
+        },
+      },
     },
     articles: { edges: allArticles },
+    // realArticles,
   },
 }) => {
-  const featuredArticle = React.useMemo(() => allArticles[0].node, [
-    allArticles,
-  ]);
-  const articles = React.useMemo(() => allArticles.slice(1), [allArticles]);
+  // const featuredArticle = React.useMemo(() => allArticles[0].node, [
+  //   allArticles,
+  // ]);
+  // const articles = React.useMemo(() => allArticles.slice(1), [allArticles]);
+
+  // const [realArticles1, realArticles2] = React.useMemo(() => {
+  //   const i = Math.floor(realArticles.length / 2);
+  //   return [
+  //     realArticles.slice(0, i),
+  //     realArticles.slice(i + 1),
+  //   ];
+  // }, [realArticles]);
+
+  const featuredArticle = React.useMemo(() => {
+    const {
+      fields: {
+        slug,
+      },
+      frontmatter: {
+        title,
+        overview,
+        featuredimage: {
+          childImageSharp: featuredImage,
+        },
+      },
+    } = allArticles[0].node;
+
+    return {
+      slug,
+      title,
+      overview,
+      featuredImage,
+    };
+  }, [allArticles]);
+
+  const articles = React.useMemo(() => allArticles.slice(1).map(({
+    node: {
+      id,
+      fields: {
+        slug,
+      },
+      frontmatter: {
+        title,
+        overview,
+        tags,
+        featuredimage: {
+          childImageSharp: featuredImage,
+        },
+      },
+    },
+  }) => ({
+    id,
+    slug,
+    title,
+    overview,
+    tags,
+    featuredImage,
+  })), [allArticles]);
 
   return (
-    <Layout>
-      <div className="home">
-        {ImgValidation.fluid(mainAdvertisement) && (
-          <div className="home__main-advertisement">
-            <Img
-              className="home__main-advertisement__img"
-              alt="Advertisement"
-              fluid={mainAdvertisement.childImageSharp.fluid}
-            />
-          </div>
-        )}
-        <div className="home__main-content">
-          <Card
-            imgProps={featuredArticle.frontmatter.featuredimage.childImageSharp}
-            title={featuredArticle.frontmatter.title}
-            href={featuredArticle.fields.slug}
-          >
-            <p>{featuredArticle.frontmatter.overview}</p>
-
-            <div className="home__new-articles">
-              {articles.map(({ node: article }) => (
-                <figure key={article.id} className="home__new-article">
-                  <div>
-                    <a href={article.fields.slug}>
-                      {ImgValidation.fixed(article.frontmatter.featuredimage) && (
-                        <Img
-                          className="home__new-article__desktop-image"
-                          alt={article.frontmatter.title}
-                          fixed={
-                            article.frontmatter.featuredimage.childImageSharp.fixed
-                          }
-                        />
-                      )}
-                      {ImgValidation.fixed(article.frontmatter.featuredimage, 'fixedMobile') && (
-                        <Img
-                          className="home__new-article__mobile-image"
-                          alt={article.frontmatter.title}
-                          fixed={
-                            article.frontmatter.featuredimage.childImageSharp.fixedMobile
-                          }
-                        />
-                      )}
-                    </a>
-                    <figcaption>
-                      <a href={article.fields.slug}>
-                        <p>{article.frontmatter.tags[0]}</p>
-                      </a>
-                      <a href={article.fields.slug}>
-                        <h5>{article.frontmatter.title}</h5>
-                      </a>
-                      <a
-                        href={article.fields.slug}
-                        className="home__new-article__description"
-                      >
-                        <p>{article.frontmatter.overview}</p>
-                      </a>
-                    </figcaption>
-                  </div>
-                </figure>
-              ))}
-            </div>
-          </Card>
-        </div>
-      </div>
-    </Layout>
+    <Home
+      mainAdvertisement={mainAdvertisement}
+      featuredArticle={featuredArticle}
+      articles={articles}
+    />
   );
 };
 
@@ -129,6 +125,18 @@ IndexPage.propTypes = {
         }).isRequired,
       ).isRequired,
     }),
+
+    realArticles: PropTypes.arrayOf(
+      PropTypes.shape({
+        source: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }).isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        url: PropTypes.string.isRequired,
+        urlToImage: PropTypes.string,
+      }).isRequired,
+    ).isRequired,
   }).isRequired,
 };
 
@@ -147,10 +155,11 @@ export const pageQuery = graphql`
         }
       }
     }
+
     articles: allMarkdownRemark(
       filter: { frontmatter: { templateKey: { eq: "article-page" } } }
       sort: { fields: frontmatter___date, order: DESC }
-      limit: 40
+      limit: 20
     ) {
       edges {
         node {
@@ -179,6 +188,16 @@ export const pageQuery = graphql`
           }
         }
       }
+    }
+
+    realArticles {
+      source {
+        name
+      }
+      title
+      description
+      url
+      urlToImage
     }
   }
 `;
