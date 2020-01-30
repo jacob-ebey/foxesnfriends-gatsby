@@ -10,7 +10,7 @@ const RAW_URL = 'https://raw.githubusercontent.com/jacob-ebey/foxesnfriends-gats
 
 exports.typeDefs = gql`
   type ArticleSearchResult {
-    link: String!
+    slug: String!
     title: String!
     overview: String!
     date: String!
@@ -79,7 +79,7 @@ exports.resolvers = {
             ...p[0],
             {
               node: {
-                link: resultPath,
+                slug: resultPath,
               },
             },
           ],
@@ -117,6 +117,7 @@ exports.resolvers = {
           node: {
             ...edge.node,
             ...frontmatterResults[index].attributes,
+            date: frontmatterResults[index].attributes.date.toISOString(),
           },
         })),
         pageInfo,
