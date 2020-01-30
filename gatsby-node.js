@@ -115,10 +115,10 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
           type: 'String',
         },
         author: {
-          type: 'String!',
+          type: 'String',
         },
         publishedAt: {
-          type: 'String!',
+          type: 'Date!',
         },
       },
     }),

@@ -6531,6 +6531,13 @@ from2@^2.1.0, from2@^2.1.1:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
+front-matter@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/front-matter/-/front-matter-3.1.0.tgz#a0b758c3c6c39ce43e107dd0909a57d42964c2de"
+  integrity sha512-RFEK8N6waWTdwBZOPNEtvwMjZ/hUfpwXkYUYkmmOhQGdhSulXhWrFwiUhdhkduLDiIwbROl/faF1X/PC/GGRMw==
+  dependencies:
+    js-yaml "^3.13.1"
+
 fs-capacitor@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/fs-capacitor/-/fs-capacitor-2.0.4.tgz#5a22e72d40ae5078b4fe64fe4d08c0d3fc88ad3c"
@@ -10708,6 +10715,14 @@ netlify-lambda@^1.6.3:
     toml "^2.3.3"
     webpack "^4.17.1"
     webpack-merge "^4.1.4"
+
+newsapi-netlify-lambda@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/newsapi-netlify-lambda/-/newsapi-netlify-lambda-2.4.0.tgz#65d6fe3faf1c76be51de7d1c07a84958275f3358"
+  integrity sha512-Fa0gPpeB6RAnbEjvzMRFf7rpG/wOwQjPy1ygaOYaCOY3BNlsu31wFi4/nQFvGktRbgbfNyH0ao2kN0faTEf6JA==
+  dependencies:
+    "@babel/polyfill" "^7.0.0"
+    node-fetch "^2.2.0"
 
 newsapi@^2.4.0:
   version "2.4.0"
