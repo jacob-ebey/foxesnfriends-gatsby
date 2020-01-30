@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Helmet from 'react-helmet';
 
-import Layout from '../components/layout';
+import Layout from '../containers/layout';
 import ArticlePageTemplate from '../components/templates/article-page';
 import ImgPropTypes from '../prop-types/img';
 import ImgValidation from '../validation/img';

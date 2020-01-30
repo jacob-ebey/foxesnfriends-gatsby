@@ -17,9 +17,11 @@ const Card = ({
         </Component>
       )}
       <div className="card--body">
-        <Component className="card__title" href={href}>
-          <h3>{title}</h3>
-        </Component>
+        {title && (
+          <Component className="card__title" href={href}>
+            <h3>{title}</h3>
+          </Component>
+        )}
         {children}
       </div>
     </div>
@@ -27,7 +29,7 @@ const Card = ({
 };
 
 Card.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   href: PropTypes.string,
   className: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
@@ -36,6 +38,7 @@ Card.propTypes = {
 };
 
 Card.defaultProps = {
+  title: null,
   href: null,
   className: null,
   imgProps: null,

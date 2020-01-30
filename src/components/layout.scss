@@ -1,51 +1,4 @@
-@import "reset-css";
-
 @import "./mixins/respond-to";
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#___gatsby {
-  height: 100%;
-  font-family: "Roboto", sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  color: #222;
-}
-
-a {
-  color: #036;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.react-sharing-button__link {
-  margin: 1rem 0.5rem;
-}
-
-.react-sharing-button__text {
-  visibility: hidden;
-  position: absolute;
-  overflow: hidden;
-  width: 0;
-  height: 0;
-}
-
-#gatsby-focus-wrapper {
-  display: grid;
-  min-height: 100%;
-  grid-template-rows: 1fr auto;
-}
 
 .top {
   background-color: #f6f8fa;
@@ -170,7 +123,7 @@ a {
   }
 }
 
-footer {
+.footer {
   grid-row-start: 2;
   grid-row-end: 3;
   padding: 1rem;

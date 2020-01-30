@@ -4,6 +4,7 @@ import marked from 'marked';
 import moment from 'moment';
 
 import ArticlePage from '../../components/templates/article-page';
+import useFluidImage from '../../hooks/use-fluid-image';
 
 const ArticlePreviewTemplate = ({ entry }) => {
   const title = entry.getIn(['data', 'title']);
@@ -16,37 +17,7 @@ const ArticlePreviewTemplate = ({ entry }) => {
     date = moment(date).format('D/M/YYYY');
   }
 
-  const [featuredimage, setFeaturedimage] = React.useState(null);
-  React.useEffect(() => {
-    let canceled = false;
-
-    if (featuredimagesrc) {
-      const img = new Image();
-      img.src = featuredimagesrc;
-      img.addEventListener('load', () => {
-        if (canceled) {
-          return;
-        }
-
-        const aspectRatio = img.width / img.height;
-
-        setFeaturedimage({
-          childImageSharp: {
-            fluid: {
-              aspectRatio,
-              src: featuredimagesrc,
-              srcSet: `${featuredimagesrc} ${img.width}w`,
-              sizes: `(max-width: ${img.width}px) 100vw, ${img.width}px`,
-            },
-          },
-        });
-      });
-    }
-
-    return () => {
-      canceled = true;
-    };
-  }, [featuredimagesrc]);
+  const featuredimage = useFluidImage(featuredimagesrc);
 
   return (
     <ArticlePage
