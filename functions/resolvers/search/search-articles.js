@@ -116,11 +116,7 @@ exports.resolvers = {
           ...edge,
           node: {
             ...edge.node,
-            title: frontmatterResults[index].attributes.title,
-            overview: frontmatterResults[index].attributes.overview,
-            date: frontmatterResults[index].attributes.date,
-            tags: frontmatterResults[index].attributes.tags,
-            featuredimage: frontmatterResults[index].attributes.featuredimage,
+            ...frontmatterResults[index].attributes,
           },
         })),
         pageInfo,
