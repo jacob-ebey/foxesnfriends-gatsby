@@ -37,7 +37,6 @@ const HomePreviewTemplate = ({ entry }) => {
         overview: 'Featured article overview would go here. It is normally longer and takes up some space.',
         featuredImage: featuredImage.childImageSharp,
       }}
-      articles={[]}
     />
   ) : null;
 };

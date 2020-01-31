@@ -4,6 +4,7 @@ const { createFilePath } = require('gatsby-source-filesystem');
 const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const stocks = require('yahoo-stock-prices');
 const NewsAPI = require('newsapi');
+const _ = require('lodash');
 
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 
@@ -136,7 +137,8 @@ exports.createResolvers = ({ createResolvers }) => {
               return Promise.reject(new Error('could not load real news headlines'));
             }
 
-            return Promise.resolve(headlinesResult.articles);
+            const articles = _.uniq(headlinesResult.articles, 'url').filter((a) => !!a.urlToImage);
+            return Promise.resolve(articles);
           }),
       },
       stocks: {
