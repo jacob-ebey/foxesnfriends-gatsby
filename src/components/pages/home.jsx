@@ -225,7 +225,7 @@ const Home = ({
 
         @media (min-width: 600px) {
           .home {
-            grid-template-areas: "a a" "sb m" "sb sa";
+            grid-template-areas: "a a" "sa m" "sa sb";
             grid-template-columns: 0.6fr 1.4fr;
             grid-template-rows: auto auto auto;
           }
