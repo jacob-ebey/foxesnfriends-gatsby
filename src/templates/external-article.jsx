@@ -2,30 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Helmet from 'react-helmet';
+import marked from 'marked';
+import moment from 'moment';
 
 import Layout from '../containers/layout';
 import ArticlePageTemplate from '../components/templates/article-page';
 import ImgPropTypes from '../prop-types/img';
-import ImgValidation from '../validation/img';
 
-const ArticlePage = ({
+const ExternalArticlePage = ({
   data: {
-    article: {
-      html,
-      fields: { slug },
-      frontmatter: {
-        date,
-        featuredimage,
-        tags,
-        title,
-        overview,
-      },
-    },
     site: {
       siteMetadata: { siteUrl },
     },
     relatedArticles,
     realArticles,
+  },
+  pageContext: {
+    article: {
+      slug,
+      title,
+      description,
+      publishedAt,
+      content,
+      url: articleUrl,
+      urlToImage,
+    },
   },
 }) => {
   const url = React.useMemo(() => siteUrl + slug, [siteUrl, slug]);
@@ -45,41 +46,41 @@ const ArticlePage = ({
     },
     slug: aslug,
     title: atitle,
-    description,
+    description: adescription,
     url: aurl,
-    urlToImage,
+    urlToImage: aurlToImage,
   }) => ({
     sourceName,
     slug: aslug,
     title: atitle,
-    description,
+    description: adescription,
     url: aurl,
-    urlToImage,
+    urlToImage: aurlToImage,
   })), [realArticles]);
 
   return (
     <Layout>
       <Helmet>
         <title>{`${title}`}</title>
-        <meta name="description" content={`${overview}`} />
+        <meta name="description" content={`${description || title}`} />
 
         <meta name="og:url" content={url} />
         <meta name="og:title" content={title} />
-        <meta name="og:description" content={overview} />
-        {ImgValidation.fluid(featuredimage) && (
+        <meta name="og:description" content={description || title} />
+        {urlToImage && (
           <meta
             name="og:image"
-            content={siteUrl + featuredimage.childImageSharp.fluid.src}
+            content={urlToImage}
           />
         )}
         <meta name="og:type" content="website" />
 
         <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={overview} />
-        {ImgValidation.fluid(featuredimage) && (
+        <meta name="twitter:description" content={description || title} />
+        {urlToImage && (
           <meta
             name="twitter:image"
-            content={siteUrl + featuredimage.childImageSharp.fluid.src}
+            content={urlToImage}
           />
         )}
         <meta name="twitter:card" content="summary" />
@@ -88,43 +89,41 @@ const ArticlePage = ({
       <ArticlePageTemplate
         siteUrl={siteUrl}
         article={{
-          date,
-          html,
-          featuredimage,
+          date: moment(publishedAt).format('D/M/YYYY'),
+          html: marked(content),
           slug,
-          tags,
           title,
+          featuredimagesrc: urlToImage,
         }}
         relatedArticles={mappedArticles}
         realArticles={mappedRealArticles}
-      />
+      >
+        <a href={articleUrl} rel="noopener noreferrer" target="_blank">Read More</a>
+      </ArticlePageTemplate>
     </Layout>
   );
 };
 
-ArticlePage.propTypes = {
+ExternalArticlePage.propTypes = {
+  pageContext: PropTypes.shape({
+    article: PropTypes.shape({
+      source: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+      slug: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      urlToImage: PropTypes.string,
+      publishedAt: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+
   data: PropTypes.shape({
     site: PropTypes.shape({
       siteMetadata: PropTypes.shape({
         siteUrl: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-
-    article: PropTypes.shape({
-      html: PropTypes.string,
-      fields: PropTypes.shape({
-        slug: PropTypes.string.isRequired,
-      }).isRequired,
-      frontmatter: PropTypes.shape({
-        date: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        overview: PropTypes.string.isRequired,
-        tags: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-        featuredimage: PropTypes.shape({
-          childImageSharp: PropTypes.shape({
-            fluid: ImgPropTypes.fluid,
-          }),
-        }),
       }).isRequired,
     }).isRequired,
 
@@ -166,37 +165,18 @@ ArticlePage.propTypes = {
   }).isRequired,
 };
 
-export default ArticlePage;
+export default ExternalArticlePage;
 
 export const pageQuery = graphql`
-  query ArticlePage($id: String!, $tags: [String]) {
+  query ExternalArticlePage {
     site {
       siteMetadata {
         siteUrl
       }
     }
-    article: markdownRemark(id: { eq: $id }) {
-      id
-      html
-      fields {
-        slug
-      }
-      frontmatter {
-        date(formatString: "D/M/YYYY")
-        title
-        overview
-        tags
-        featuredimage {
-          childImageSharp {
-            fluid(maxWidth: 992) {
-              ...GatsbyImageSharpFluid
-            }
-          }
-        }
-      }
-    }
+
     relatedArticles: allMarkdownRemark(
-      filter: { id: { ne: $id }, frontmatter: { templateKey: { eq: "article-page" }, tags: { in: $tags } } }
+      filter: { frontmatter: { templateKey: { eq: "article-page" } } }
       sort: { fields: frontmatter___date, order: DESC }
       limit: 10
     ) {

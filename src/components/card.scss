@@ -2,14 +2,14 @@
   display: block;
   background-color: #ffffff;
   border: 1px solid #cedfef;
-  
-  &--body {
-    padding: 1rem;
+}
 
-    h3 {
-      font-size: 21px;
-      margin-bottom: 1rem;
-      text-transform: capitalize;
-    }
-  }
+.card__body {
+  padding: 1rem;
+}
+
+.card__title h3 {
+  font-size: 21px;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
 }

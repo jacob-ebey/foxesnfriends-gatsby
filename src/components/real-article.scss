@@ -1,0 +1,40 @@
+.real-article {
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.real-article img {
+  width: 100%;
+}
+
+.real-article :global(a) {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.real-article :global(h5) {
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+}
+
+.real-article__img-wrapper {
+  margin-bottom: 0.5rem;
+  padding-bottom: calc(1080 / 1920 * 100%);
+  position: relative;
+  width: 100%;
+}
+
+.real-article__img-wrapper img {
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
