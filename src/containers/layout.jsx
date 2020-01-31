@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, useStaticQuery } from 'gatsby';
+import LogRocket from 'logrocket';
 
 import Layout from '../components/layout';
+
+LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const LayoutContainer = ({ children }) => {
   const {

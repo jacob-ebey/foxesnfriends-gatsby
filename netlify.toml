@@ -9,3 +9,4 @@
 [template.environment]
   NEWS_API_KEY = "Your api key for https://newsapi.org/"
   GITHUB_TOKEN = "Your api token. For more info see https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line"
+  LOGROCKET_APP_ID = "Your logrocket app id. For more info see https://logrocket.com/"

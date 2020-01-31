@@ -30,6 +30,12 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: 'gatsby-plugin-env-variables',
+      options: {
+        whitelist: ['LOGROCKET_APP_ID'],
+      },
+    },
+    {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
         resolveEnv: () => NETLIFY_ENV,
