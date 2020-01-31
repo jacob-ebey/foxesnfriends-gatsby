@@ -2,10 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, useStaticQuery } from 'gatsby';
 import LogRocket from 'logrocket';
+import * as Sentry from '@sentry/browser';
 
 import Layout from '../components/layout';
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
+Sentry.init({ dsn: process.env.SENTRY_DNS });
+
+LogRocket.getSessionURL((sessionURL) => {
+  Sentry.configureScope((scope) => {
+    scope.setExtra('sessionURL', sessionURL);
+  });
+});
 
 const LayoutContainer = ({ children }) => {
   const {

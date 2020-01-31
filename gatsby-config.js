@@ -32,7 +32,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-env-variables',
       options: {
-        whitelist: ['LOGROCKET_APP_ID'],
+        whitelist: ['LOGROCKET_APP_ID', 'SENTRY_DNS'],
       },
     },
     {
