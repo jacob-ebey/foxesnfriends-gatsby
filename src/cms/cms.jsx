@@ -5,7 +5,7 @@ import cloudinary from 'netlify-cms-media-library-cloudinary';
 import ArticlePreviewTemplate from './templates/article-preview-template';
 import HomePreviewTemplate from './templates/home-preview-template';
 
-import '../components/layout.scss';
+import '../components/global.scss';
 
 CMS.registerMediaLibrary(uploadcare);
 CMS.registerMediaLibrary(cloudinary);

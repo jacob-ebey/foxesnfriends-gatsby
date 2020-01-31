@@ -61,6 +61,7 @@ module.exports = {
       },
     },
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-styled-jsx',
     'gatsby-plugin-sass',
     {
       // Keep as first gatsby-source-filesystem plugin for gatsby image support

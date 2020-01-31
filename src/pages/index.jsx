@@ -17,22 +17,9 @@ const IndexPage = ({
       },
     },
     articles: { edges: allArticles },
-    // realArticles,
+    realArticles,
   },
 }) => {
-  // const featuredArticle = React.useMemo(() => allArticles[0].node, [
-  //   allArticles,
-  // ]);
-  // const articles = React.useMemo(() => allArticles.slice(1), [allArticles]);
-
-  // const [realArticles1, realArticles2] = React.useMemo(() => {
-  //   const i = Math.floor(realArticles.length / 2);
-  //   return [
-  //     realArticles.slice(0, i),
-  //     realArticles.slice(i + 1),
-  //   ];
-  // }, [realArticles]);
-
   const featuredArticle = React.useMemo(() => {
     const {
       fields: {
@@ -79,11 +66,36 @@ const IndexPage = ({
     featuredImage,
   })), [allArticles]);
 
+  const [realArticlesA, realArticlesB] = React.useMemo(() => {
+    const transformed = realArticles.map(({
+      source: {
+        name: sourceName,
+      },
+      title,
+      description,
+      url,
+      urlToImage,
+    }) => ({
+      sourceName,
+      title,
+      description,
+      url,
+      urlToImage,
+    }));
+    const i = Math.floor(transformed.length / 2);
+    return [
+      transformed.slice(0, i),
+      transformed.slice(i + 1),
+    ];
+  }, [realArticles]);
+
   return (
     <Home
       mainAdvertisement={mainAdvertisement}
       featuredArticle={featuredArticle}
       articles={articles}
+      realArticlesA={realArticlesA}
+      realArticlesB={realArticlesB}
     />
   );
 };
@@ -116,8 +128,6 @@ IndexPage.propTypes = {
               featuredimage: PropTypes.shape({
                 childImageSharp: PropTypes.shape({
                   fluid: ImgPropTypes.fluid,
-                  fixed: ImgPropTypes.fixed,
-                  fixedMobile: ImgPropTypes.fixed,
                 }),
               }),
             }).isRequired,
@@ -176,12 +186,6 @@ export const pageQuery = graphql`
               childImageSharp {
                 fluid(maxWidth: 768) {
                   ...GatsbyImageSharpFluid
-                }
-                fixed(width: 156, height: 88) {
-                  ...GatsbyImageSharpFixed
-                }
-                fixedMobile: fixed(width: 88, height: 50) {
-                  ...GatsbyImageSharpFixed
                 }
               }
             }
