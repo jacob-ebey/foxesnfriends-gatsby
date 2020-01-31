@@ -16,7 +16,7 @@ const topHeadlines = newsapi.v2.topHeadlines().then((headlinesResult) => {
     return Promise.reject(new Error('could not load real news headlines'));
   }
 
-  const articles = _.uniq(headlinesResult.articles, 'url').filter((a) => !!a.urlToImage).map((article) => {
+  const articles = _.uniq(headlinesResult.articles, 'url').filter((a) => !!a.urlToImage && !!a.content).map((article) => {
     const parts = article.url.split('/');
     const lastPath = path.parse(parts[parts.length - 1]).name;
 
