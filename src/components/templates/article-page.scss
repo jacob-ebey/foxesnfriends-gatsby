@@ -92,8 +92,6 @@
 }
 
 .article-page__article {
-  max-width: 992px;
-  margin: 0 auto;
   padding: 0 1rem;
 
   img,
@@ -110,6 +108,7 @@
     letter-spacing: -1.2px;
     margin-bottom: 24px;
     text-transform: capitalize;
+    word-break: break-word;
   }
 
   p {
