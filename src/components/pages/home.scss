@@ -1,0 +1,104 @@
+@import "../mixins/respond-to";
+
+.home {
+  display: grid;
+  grid-template-areas: "a" "m" "sa" "sb";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto auto;
+}
+
+.home__advertisement {
+  align-items: center;
+  background-color: #eff2f5;
+  display: flex;
+  grid-area: a;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.home__advertisement :global(.gatsby-image-wrapper) {
+  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
+}
+
+.home__main {
+  grid-area: m;
+  padding: 1rem;
+}
+
+.home__main-content__main__figure {
+  padding-top: 1rem;
+}
+
+.home__main-content__main__figure__clear {
+  clear: both;
+}
+
+:global(.home__main-content__main__figure__image-wrapper) {
+  float: left;
+  width: 40%;
+}
+
+:global(.home__main-content__main__figure__image-wrapper) :global(.gatsby-image-wrapper) {
+  margin-right: 0.5rem;
+}
+
+:global(.home__main-content__main__figure__tags) {
+  display: inline-block;
+  min-width: 60%;
+  font-size: 12px;
+}
+
+:global(.home__main-content__main__figure__title) {
+  min-width: 60%;
+  font-size: 18px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+:global(.home__main-content__main__figure__overview) {
+  display: inline;
+  white-space: pre-line;
+}
+
+.main__secondary {
+  padding: 1rem;
+  min-width: 0;
+}
+
+.main__secondary--a {
+  grid-area: sa;
+}
+
+.main__secondary--b {
+  grid-area: sb;
+}
+
+@include respond-to("md") {
+  .home {
+    grid-template-areas: "a a" "sa m" "sa sb";
+    grid-template-columns: 0.6fr 1.4fr;
+    grid-template-rows: auto auto auto;
+  }
+}
+
+@include respond-to("lg") {
+  .home {
+    grid-template-areas: "a a a" "sa m sb" "sa m sb";
+    grid-template-columns: 0.7fr 1.6fr 0.7fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  :global(.home__main-content__main__figure__image-wrapper) {
+    width: 30%;
+  }
+
+  :global(.home__main-content__main__figure__tags) {
+    min-width: 70%;
+  }
+
+  :global(.home__main-content__main__figure__title) {
+    min-width: 70%;
+  }
+}

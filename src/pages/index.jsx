@@ -71,12 +71,14 @@ const IndexPage = ({
       source: {
         name: sourceName,
       },
+      slug,
       title,
       description,
       url,
       urlToImage,
     }) => ({
       sourceName,
+      slug,
       title,
       description,
       url,
@@ -141,6 +143,7 @@ IndexPage.propTypes = {
         source: PropTypes.shape({
           name: PropTypes.string.isRequired,
         }).isRequired,
+        slug: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         description: PropTypes.string,
         url: PropTypes.string.isRequired,
@@ -198,6 +201,7 @@ export const pageQuery = graphql`
       source {
         name
       }
+      slug
       title
       description
       url

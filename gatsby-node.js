@@ -1,36 +1,58 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+
 const { createFilePath } = require('gatsby-source-filesystem');
 const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const stocks = require('yahoo-stock-prices');
 const NewsAPI = require('newsapi');
 const _ = require('lodash');
+const hasher = require('node-object-hash');
+
+const hashSortCoerce = hasher({ sort: true, coerce: true });
 
 const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
+const topHeadlines = newsapi.v2.topHeadlines().then((headlinesResult) => {
+  if (headlinesResult.status !== 'ok' || !headlinesResult.articles) {
+    return Promise.reject(new Error('could not load real news headlines'));
+  }
+
+  const articles = _.uniq(headlinesResult.articles, 'url').filter((a) => !!a.urlToImage && !!a.content).map((article) => {
+    const parts = article.url.split('/');
+    const lastPath = path.parse(parts[parts.length - 1]).name;
+
+    const slug = `/article/e/${lastPath}-${hashSortCoerce.hash(article)}`;
+
+    return {
+      ...article,
+      slug,
+    };
+  });
+  return Promise.resolve(articles);
+});
 
 exports.createPages = async ({ actions: { createPage }, graphql }) => {
   await Promise.all([
     graphql(`
-        {
-          articles: allMarkdownRemark(
-            filter: { frontmatter: { templateKey: { eq: "article-page" } } }
-            sort: { fields: frontmatter___date, order: DESC }
-          ) {
-            edges {
-              node {
-                id
-                fields {
-                  slug
-                }
-                frontmatter {
-                  templateKey
-                  tags
-                }
+      {
+        articles: allMarkdownRemark(
+          filter: { frontmatter: { templateKey: { eq: "article-page" } } }
+          sort: { fields: frontmatter___date, order: DESC }
+        ) {
+          edges {
+            node {
+              id
+              fields {
+                slug
+              }
+              frontmatter {
+                templateKey
+                tags
               }
             }
           }
         }
-      `).then(({ data, errors }) => {
+      }
+    `).then(({ data, errors }) => {
       if (errors) {
         errors.forEach((e) => {
           // eslint-disable-next-line no-console
@@ -55,6 +77,19 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
       });
 
       return Promise.resolve();
+    }),
+
+    topHeadlines.then((realArticles) => {
+      realArticles.forEach((article) => {
+        createPage({
+          path: article.slug,
+          tags: article.title.split(' '),
+          component: path.resolve('src/templates/external-article.jsx'),
+          context: {
+            article,
+          },
+        });
+      });
     }),
   ]);
 };
@@ -103,6 +138,9 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
         source: {
           type: 'RealArticleSource!',
         },
+        slug: {
+          type: 'String!',
+        },
         url: {
           type: 'String!',
         },
@@ -121,57 +159,54 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
         publishedAt: {
           type: 'Date!',
         },
+        content: {
+          type: 'String!',
+        },
       },
     }),
   ]);
 };
 
 exports.createResolvers = ({ createResolvers }) => {
+  const stocksResult = Promise.all([
+    new Promise((resolve, reject) => {
+      stocks.getCurrentPrice('AAPL', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    }),
+    new Promise((resolve, reject) => {
+      stocks.getCurrentPrice('MSFT', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    }),
+    new Promise((resolve, reject) => {
+      stocks.getCurrentPrice('FB', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    }),
+  ]);
+
   createResolvers({
     Query: {
       realArticles: {
         type: '[RealArticle!]!',
-        resolve: () => newsapi.v2.topHeadlines()
-          .then((headlinesResult) => {
-            if (headlinesResult.status !== 'ok' || !headlinesResult.articles) {
-              return Promise.reject(new Error('could not load real news headlines'));
-            }
-
-            const articles = _.uniq(headlinesResult.articles, 'url').filter((a) => !!a.urlToImage);
-            return Promise.resolve(articles);
-          }),
+        resolve: () => topHeadlines,
       },
       stocks: {
         type: 'StocksData!',
-        resolve: () => Promise.all([
-          new Promise((resolve, reject) => {
-            stocks.getCurrentPrice('AAPL', (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(data);
-              }
-            });
-          }),
-          new Promise((resolve, reject) => {
-            stocks.getCurrentPrice('MSFT', (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(data);
-              }
-            });
-          }),
-          new Promise((resolve, reject) => {
-            stocks.getCurrentPrice('FB', (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(data);
-              }
-            });
-          }),
-        ]).then(([apple, microsoft, facebook]) => ({
+        resolve: () => stocksResult.then(([apple, microsoft, facebook]) => ({
           apple,
           microsoft,
           facebook,
