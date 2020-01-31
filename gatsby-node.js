@@ -25,6 +25,7 @@ const topHeadlines = newsapi.v2.topHeadlines().then((headlinesResult) => {
     return {
       ...article,
       slug,
+      urlToImage: article.urlToImage.replace('http://', 'https://'),
     };
   });
   return Promise.resolve(articles);
@@ -202,7 +203,7 @@ exports.createResolvers = ({ createResolvers }) => {
     Query: {
       realArticles: {
         type: '[RealArticle!]!',
-        resolve: () => topHeadlines,
+        resolve: () => topHeadlines.then((headlines) => _.shuffle(headlines)),
       },
       stocks: {
         type: 'StocksData!',
