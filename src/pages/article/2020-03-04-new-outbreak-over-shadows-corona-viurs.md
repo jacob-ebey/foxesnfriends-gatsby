@@ -1,11 +1,11 @@
 ---
 templateKey: article-page
-title: New Outbreak Over-Shadows Corona Viurs
+title: New Outbreak Over-Shadows Corona Virus
 date: 2020-03-04T08:09:41.910Z
 tags:
   - World
   - US
-  - Corona Viurs
+  - Corona Virus
 featuredimage: /img/microbiologists-800x600.jpg
 overview: >-
   As the corona virus ravages the world, a new pandemic is emerging from the
