@@ -7,6 +7,7 @@ const stocks = require('yahoo-stock-prices');
 const NewsAPI = require('newsapi');
 const _ = require('lodash');
 const hasher = require('node-object-hash');
+const urlify = require('urlify').create();
 
 const hashSortCoerce = hasher({ sort: true, coerce: true });
 
@@ -20,7 +21,7 @@ const topHeadlines = newsapi.v2.topHeadlines().then((headlinesResult) => {
     const parts = article.url.split('/');
     const lastPath = path.parse(parts[parts.length - 1]).name;
 
-    const slug = `/article/e/${lastPath}-${hashSortCoerce.hash(article)}`;
+    const slug = `/article/e/${urlify(`${lastPath}-${hashSortCoerce.hash(article)}`)}`;
 
     return {
       ...article,
