@@ -71,7 +71,7 @@
   "dependencies": {
     "@sentry/browser": "^5.11.2",
     "apollo-server": "^2.9.16",
-    "apollo-server-lambda": "^2.9.16",
+    "apollo-server-lambda": "^2.14.2",
     "front-matter": "^3.1.0",
     "gatsby": "^2.13.31",
     "gatsby-image": "^2.0.23",
